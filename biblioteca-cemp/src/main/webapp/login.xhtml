@@ -326,9 +326,7 @@ cover
 					<div class="col-xs-12">
 						<!-- atributos de commandButton onclick="showBar()" oncomplete="if(args.validationFailed){hideBar()} -->
 						<p:commandButton styleClass="btn btn-success btn-block"
-							update="@form" action="#{loginController.login}" value="Entrar" />
-						<!-- <h:outputText value="Carregando ..." style="color: blue"
-							rendered="#{loginController.carregando}" /> -->
+							update="@form" action="#{loginController.login()}" value="Entrar" />
 					</div>
 				</div>
 			</h:form>

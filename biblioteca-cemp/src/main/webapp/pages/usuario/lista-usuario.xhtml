@@ -75,14 +75,7 @@
 						paginator="true"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {LastPageLink}"
 						value="#{usuarioController.listaUsuario}" var="row"
-						rowKey="#{row.id}"
-						selection="#{usuarioController.usuarioSelecionadas}">
-
-						<p:ajax event="rowSelect" />
-
-						<p:column selectionMode="multiple" width="5%"
-							styleClass="align-center" />
-
+						rowKey="#{row.id}">
 						<p:column headerText="Nome" filterBy="#{row.nome}"
 							sortBy="#{row.funcionario.pessoa.nome}"
 							filterMatchMode="contains">

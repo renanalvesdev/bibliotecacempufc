@@ -420,7 +420,7 @@ public class AlunoController implements Serializable {
 
 	@PostConstruct
 	public void carregarAluno() {
-		listaAluno = alunoDao.getListEntity(Aluno.class);
+		listaAluno = alunoDao.todos();
 	}
 
 	public String listar() {
