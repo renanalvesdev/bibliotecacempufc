@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<ui:param name="renderBreadCrumb" value="false" />
+	</ui:define>
+
+	<ui:define name="title">
+		<p:growl autoUpdate="true" life="4000" />
+
+		<h2 class="align-center">
+			Biblioteca CEMP
+			<!-- <span class="text-aqua"> <i><a href="http://karanalpe.com.br/" target="_blank"
+                                                          style="text-transform: none;text-decoration: none"> Rodizio 82 reais</a></i></span>! -->
+			<br />
+			<!--   <small>Utilizando <p:link value="Primefaces" href="http://primefaces.org" target="_blank"/>, <p:link value="Bootstrap"
+                                                                                                  href="http://getbootstrap.com/" target="_blank"/> e
+                <p:link value="Admin LTE" href="https://almsaeedstudio.com/themes/AdminLTE/index2.html" target="_blank"/> com
+                <p:link value="JSF" href="https://javaserverfaces.java.net/" target="_blank"/>.
+            </small> -->
+		</h2>
+		<p:spacer />
+		<p:separator />
+
+		<h:form>
+			<div class="row">
+
+				<div class="clearfix visible-sm-block"></div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<p:link>
+							<span class="info-box-icon bg-yellow"><i
+								class="icon fa fa-exchange"></i></span>
+						</p:link>
+						<div class="info-box-content">
+							<span class="info-box-text">Total empréstimos</span> <span
+								class="info-box-number">#{dashboardController.totalEmprestimos}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<p:link>
+							<span class="info-box-icon bg-red"><i
+								class="icon fa fa-clock-o"></i></span>
+						</p:link>
+						<div class="info-box-content">
+							<span class="info-box-text">Total Reservas</span> <span
+								class="info-box-number">#{dashboardController.totalReservas}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<p:link>
+							<span class="info-box-icon bg-green"><i
+								class="icon fa fa-book"></i></span>
+						</p:link>
+						<div class="info-box-content">
+							<span class="info-box-text">Total Livros</span> <span
+								class="info-box-number">#{dashboardController.totalLivros}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12">
+					<div class="info-box">
+						<p:link>
+							<span class="info-box-icon bg-blue"><i
+								class="icon fa fa-user"></i></span>
+						</p:link>
+						<div class="info-box-content">
+							<span class="info-box-text">Total Alunos</span> <span
+								class="info-box-number">#{dashboardController.totalAlunos}</span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</h:form>
+	</ui:define>
+
+
+</ui:composition>

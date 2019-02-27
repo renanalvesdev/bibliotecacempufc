@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ul class="sidebar-menu">
+		<li><p:link href="/index.xhtml">
+				<i class="fa fa-home"></i>
+				<span>Home</span>
+			</p:link></li>
+
+		<li class="header">Operações</li>
+		<li><p:link href="/pages/emprestimo/lista-emprestimo.xhtml">
+				<i class="fa fa-exchange "></i>
+				<span>Empréstimo</span>
+			</p:link></li>
+
+		<li><p:link href="/pages/reserva/lista-reserva.xhtml">
+				<i class="fa fa-clock-o "></i>
+				<span>Reserva</span>
+			</p:link></li>
+
+		<li class="header">Cadastros</li>
+
+
+		<li><p:link href="/pages/aluno/lista-aluno.xhtml">
+				<i class="fa fa-user"></i>
+				<span>Aluno</span>
+			</p:link></li>
+
+		<li><p:link href="/pages/livro/lista-livro.xhtml">
+				<i class="fa fa-book"></i>
+				<span>Livro</span>
+			</p:link></li>
+
+
+		<li class="header" >Outros</li>
+
+		<li><p:link
+				rendered="#{loginController.usuario.permissao eq 'ADMINISTRADOR'}"
+				href="/pages/configuracoes/cadastro-configuracoes.xhtml">
+				<i class="fa fa-cog "></i>
+				<span>Configurações</span>
+			</p:link></li>
+		<li><p:link
+				rendered="#{loginController.usuario.permissao eq 'ADMINISTRADOR'}"
+				href="/pages/usuario/lista-usuario.xhtml">
+				<i class="fa fa-users "></i>
+				<span>Usuários</span>
+			</p:link></li>
+
+	</ul>
+
+</ui:composition>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="title">
+        Cadastro de Livros
+    </ui:define>
+
+	<ui:define name="body">
+		<f:metadata>
+		</f:metadata>
+
+		<adm:breadcrumb title="Cadastro de Livros"
+			link="cadastro-livro.xhtml?id=" />
+		<h:form id="form" prependId="false">
+			<p:growl id="growl" showDetail="true" />
+			<p:focus />
+
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div id="main-buttons" class="hidden-sm hidden-xs">
+						<p:commandButton value="Salvar" update="@form, form:growl"
+							icon="fa fa-check" action="#{livroController.salvar()}"
+							styleClass="btn-primary" />
+						<p:spacer width="5" />
+						<!-- 	<p:commandButton value="Excluir" process="@this"
+							icon="fa fa-trash" styleClass="btn-danger">
+						</p:commandButton> -->
+						<p:spacer width="5" />
+						<p:commandButton value="Voltar" immediate="true"
+							action="#{livroController.listar()}" process="@this"
+							icon="fa fa-close" />
+
+					</div>
+
+					<p:splitButton value="Salvar" update="@form" icon="fa fa-check"
+						styleClass="hidden-md hidden-lg btn-primary">
+						<p:menuitem value="Excluir" process="@this" icon="fa fa-trash" />
+						<p:separator />
+						<p:menuitem value="Voltar"
+							action="lista-livro?faces-redirect=true" process="@this"
+							icon="fa fa-close" />
+					</p:splitButton>
+
+					<p:separator />
+
+					<div class="ui-fluid">
+
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel value="Ativo ?" />
+							<p:selectBooleanButton id="value1" onIcon="fa fa-check"
+								offIcon="fa fa-close" value="#{livroController.livro.status}"
+								onLabel="Sim" offLabel="Não" style="width:60px" />
+						</p:panelGrid>
+						<br /> <br />
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							id="panelinfo" styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel value="Título:" for="titulo" />
+							<p:inputText id="titulo" value="#{livroController.livro.titulo}"
+								placeholder="Ex: O segredo de Luisa"
+								style="text-transform: uppercase"
+								onchange="this.value = value.toUpperCase()" required="true" />
+
+
+							<p:outputLabel value="Autor:" for="autor" />
+							<p:inputText id="autor" value="#{livroController.livro.autor}"
+								style="text-transform: uppercase" required="true"
+								placeholder="Ex: Fernando Dolabela"
+								onchange="value=value.toUpperCase()" />
+
+							<p:outputLabel value="Ano de Publicação:" for="ano" />
+							<p:inputMask id="ano" value="#{livroController.livro.ano}"
+								mask="9999" placeholder="Ex: 2019"
+								style="text-transform: uppercase"
+								onchange="this.value = value.toUpperCase()" required="true" />
+
+
+
+							<p:outputLabel value="Editora:" for="editora" />
+							<p:inputText id="editora" placeholder="Ex: sextante"
+								value="#{livroController.livro.editora}"
+								style="text-transform: uppercase"
+								onchange="this.value = value.toUpperCase()" required="true" />
+
+
+
+							<p:outputLabel value="Código:" for="codigo" />
+							<p:inputMask
+								placeholder="7 primeiros números do código de barras"
+								id="codigo" maxlength="7"
+								value="#{livroController.livro.codigo}" mask="9999999"
+								style="text-transform: uppercase"
+								onchange="this.value = value.toUpperCase()" required="true" />
+
+							<p:outputLabel value="Nº da Edição:" for="edicao" />
+							<p:inputText id="edicao" placeholder="Ex: 1"
+								value="#{livroController.livro.edicao}"
+								style="text-transform: uppercase"
+								onchange="this.value = value.toUpperCase()" required="true" />
+
+						</p:panelGrid>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

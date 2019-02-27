@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa por Alunos
+    </ui:define>
+
+	<ui:define name="description">
+        Pesquise ... 
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa por Alunos" />
+
+		<h:form id="form">
+			<!-- <p:growl id="growl" showDetail="true" autoUpdate="true" /> -->
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<br />
+					<p:commandButton action="#{alunoController.novo()}" ajax="false"
+						icon="fa fa-plus" value="Novo" styleClass="btn-primary" />
+					<p:spacer width="5" />
+					<br />
+					<p:separator />
+					
+
+
+					<p:dataTable id="alunoTable" widgetVar="alunoTable"
+						emptyMessage="Nenhum registro encontrado." rows="5"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} 
+						{PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="( {currentPage} de {totalPages} )"
+						rowsPerPageTemplate="5,10,15"
+						value="#{alunoController.listaAluno}" var="row" rowKey="#{row.id}">
+
+						<p:column headerText="Nome" filterBy="#{row.nome}"
+							sortBy="#{row.nome}" filterMatchMode="contains">
+							<div align="center">
+								<h:commandLink value="#{row.nome}"
+									action="#{alunoController.editar()}">
+									<f:setPropertyActionListener value="#{row}"
+										target="#{alunoController.aluno}" />
+								</h:commandLink>
+							</div>
+						</p:column>
+
+						<p:column headerText="Matrícula" filterBy="#{row.matricula}"
+							filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.matricula}" />
+							</div>
+						</p:column>
+
+
+						<p:column headerText="Telefone" filterBy="#{row.telefone}"
+							filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.telefone}" />
+							</div>
+						</p:column>
+
+
+						<p:column headerText="E-mail" filterBy="#{row.email}"
+							filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.email}"
+									style="text-transform: lowercase; color: blue" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Curso" filterBy="#{row.serie}"
+							filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.serie}" />
+							</div>
+						</p:column>
+
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Alunos Selecionados" widgetVar="alunosSelecionadas"
+			height="250" width="400" responsive="true" styleClass="box-success">
+			<p:dataList id="listaAlunosSelecionadas" value="" var="aluno"
+				type="definition">
+
+			</p:dataList>
+		</p:dialog>
+
+
+	</ui:define>
+
+</ui:composition>

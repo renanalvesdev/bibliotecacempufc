@@ -1,0 +1,251 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa por Emprestimos
+    </ui:define>
+
+	<ui:define name="description">
+        Pesquise ... 
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa por Emprestimos" />
+
+		<h:form id="form">
+			<p:growl id="growl" showDetail="true" />
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<br />
+					<p:commandButton action="#{emprestimoController.novo()}"
+						ajax="false" icon="fa fa-plus" value="Nova Operação"
+						styleClass="btn-primary" />
+					<p:spacer width="5" />
+					<br />
+					<p:separator />
+
+
+					<div class="ui-fluid" id="div">
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel for="situacao" value="Situação:" />
+							<p:selectOneMenu id="situacao"
+								value="#{emprestimoController.filtro.situacaoFiltro}"
+								unselectable="true">
+								<f:selectItem itemLabel="Em andamento" itemValue="1" />
+								<f:selectItem itemLabel="Devolvido" itemValue="2" />
+								<f:selectItem itemLabel="Todos" itemValue="3" />
+							</p:selectOneMenu>
+							<p:panelGrid />
+							<p:panelGrid />
+						</p:panelGrid>
+
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel for="data_emprestimo" value="Data Empréstimo:" />
+							<p:selectOneMenu id="data_emprestimo"
+								value="#{emprestimoController.filtro.tipoDataEmprestimo}"
+								unselectable="true">
+								<f:selectItem itemLabel="Qualquer data" itemValue="" />
+								<f:selectItem itemLabel="Hoje" itemValue="1" />
+								<f:selectItem itemLabel="Esse mês" itemValue="2" />
+								<f:selectItem itemLabel="Num intervalo específico" itemValue="3" />
+								<p:ajax update="panel_intervalo_data, @form" />
+							</p:selectOneMenu>
+							<p:panelGrid />
+							<p:panelGrid />
+						</p:panelGrid>
+
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							id="panel_intervalo_data"
+							rendered="#{emprestimoController.filtro.tipoDataEmprestimo == 3}"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+
+							<h:outputText value="Entre:" for="dtInicio" />
+							<p:calendar id="dtInicio" placeholder="Data de inicio"
+								value="#{emprestimoController.filtro.dataInicialFiltro}"
+								mask="true" pattern="dd/MM/yyyy" />
+
+
+							<h:outputText value="Até:" for="dtFim" />
+							<p:calendar id="dtFim" placeholder="Data de fim"
+								value="#{emprestimoController.filtro.dataFinalFiltro}"
+								mask="true" pattern="dd/MM/yyyy" />
+						</p:panelGrid>
+					</div>
+
+					<br /> <br />
+					<div align="center">
+						<p:commandButton icon="fa fa-search" value="Buscar"
+							action="#{emprestimoController.buscarEmprestimo}"
+							update="emprestimoTable" />
+					</div>
+					<p:separator />
+
+					<br /> <br />
+					<p:dataTable id="emprestimoTable" widgetVar="emprestimoTable"
+						emptyMessage="Nenhum registro encontrado." rows="5"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} 
+						{PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="( {currentPage} de {totalPages} )"
+						rowsPerPageTemplate="5,10,15"
+						value="#{emprestimoController.listagemEmprestimo}" var="row"
+						rowKey="#{row.id}">
+
+
+						<p:column headerText="Título" filterBy="#{row.livro.titulo}"
+							sortBy="#{row.livro.titulo}" filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.livro.titulo}" />
+							</div>
+						</p:column>
+						<p:column headerText="Aluno" filterBy="#{row.aluno.nome}"
+							sortBy="#{row.aluno.nome}" filterMatchMode="contains">
+							<div align="center">
+								<h:commandLink value="#{row.aluno.nome}"
+									action="#{emprestimoController.editar()}">
+									<f:setPropertyActionListener value="#{row}"
+										target="#{emprestimoController.emprestimo}" />
+								</h:commandLink>
+							</div>
+						</p:column>
+
+
+						<p:column headerText="Data de Empréstimo">
+							<div align="center">
+
+								<h:outputText value="#{row.dataEmprestimo}">
+									<f:convertDateTime pattern="dd/MM/yyyy   HH:mm" />
+								</h:outputText>
+							</div>
+						</p:column>
+
+						<p:column headerText="Data devolução">
+							<div align="center">
+								<h:outputText value="-" rendered="#{row.status}" />
+								<h:outputText value="#{row.dataDevolucao}"
+									rendered="#{! row.status}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</div>
+						</p:column>
+
+						<p:column headerText="Data previsão devolução">
+							<div align="center">
+								<h:outputText value="#{row.dataDevolucaoPrevista}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</div>
+						</p:column>
+
+
+						<p:column headerText="Dias de posse">
+							<div align="center">
+								<h:outputText
+									value="#{emprestimoController.contaDias(row)} dia(s)" />
+							</div>
+						</p:column>
+						
+						<p:column headerText="Situação">
+							<h:outputText value="EM DIA"
+								rendered="#{emprestimoController.emprestimoEmDia(row)}"
+								style="color: green" />
+							<h:outputText value="ATRASADO"
+								rendered="#{!emprestimoController.emprestimoEmDia(row)}"
+								style="color: red" />
+						</p:column>
+						
+						<p:column headerText="Status">
+							<div align="center">
+								<h:outputText
+									value="#{row.status ? 'Em andamento' : 'Devolução'}"
+									style="color: #{row.status ? 'green' : 'red'}" />
+							</div>
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Emprestimos Selecionados"
+			widgetVar="emprestimosSelecionadas" height="250" width="400"
+			responsive="true" styleClass="box-success">
+			<p:dataList id="listaEmprestimosSelecionadas" value=""
+				var="emprestimo" type="definition">
+
+			</p:dataList>
+		</p:dialog>
+
+		<p:dialog header="Devolução de livro" styleClass="box-primary"
+			appendTo="@(body)" showEffect="fade" hideEffect="fade"
+			id="dialog_devolucao" widgetVar="dlgPrimary" resizable="false"
+			minHeight="100" modal="true">
+			<h:form id="formulario_devolucao">
+
+				<p:panelGrid columns="2" cellpadding="10" layout="grid"
+					styleClass="no-border ui-fluid">
+					<p:outputLabel value="Aluno: " />
+					<h:outputText value="#{emprestimoController.emprestimo.aluno.nome}" />
+
+					<p:outputLabel value="Livro: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.titulo}" />
+				</p:panelGrid>
+
+				<br />
+				<p:separator />
+				<div align="center">
+					<p:outputLabel value="Confirma ?" />
+				</div>
+
+				<div align="center">
+					<p:commandButton value="Sim"
+						styleClass="btn-material btn-primary ui-confirmdialog-yes"
+						update="form:growl, form:emprestimoTable "
+						actionListener="#{emprestimoController.devolverLivro()}"
+						icon="fa fa-check" />
+					<p:commandButton value="Não" type="button"
+						onclick="PF('dlgPrimary').hide()"
+						styleClass="btn-material btn-danger ui-confirmdialog-no"
+						icon="fa fa-close" />
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+
+	</ui:define>
+
+</ui:composition>

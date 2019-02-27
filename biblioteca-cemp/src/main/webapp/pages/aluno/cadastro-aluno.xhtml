@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="title">
+        Cadastro de Alunos
+    </ui:define>
+
+	<ui:define name="body">
+		<f:metadata>
+		</f:metadata>
+
+		<adm:breadcrumb title="Cadastro de Alunos"
+			link="cadastro-aluno.xhtml?id=" />
+		<h:form id="form" prependId="false">
+			<p:growl id="growl" showDetail="true" autoUpdate="true"/>
+			<p:focus />
+
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div id="main-buttons" class="hidden-sm hidden-xs">
+						<p:commandButton value="Salvar" update="@form, form:growl"
+							icon="fa fa-check" action="#{alunoController.salvar()}"
+							styleClass="btn-primary" />
+						<p:spacer width="5" />
+						<!-- <p:commandButton value="Excluir" process="@this"
+							icon="fa fa-trash" styleClass="btn-danger">
+						</p:commandButton> -->
+						<p:spacer width="5" />
+						<p:commandButton value="Voltar" immediate="true"
+							action="#{alunoController.listar()}" process="@this"
+							icon="fa fa-close" />
+
+					</div>
+
+					<p:splitButton value="Salvar" update="@form" icon="fa fa-check"
+						styleClass="hidden-md hidden-lg btn-primary">
+						<p:menuitem value="Excluir" process="@this" icon="fa fa-trash" />
+						<p:separator />
+						<p:menuitem value="Voltar"
+							action="lista-aluno?faces-redirect=true" process="@this"
+							icon="fa fa-close" />
+					</p:splitButton>
+
+					<p:separator />
+
+
+					<!-- FORMULARIO PARA PREENCHIMENTO DE DADOS -->
+					<p:tabView id="tab_view" cache="false">
+
+						<!-- TAB DADOS DO ALUNO -->
+						<p:tab title="Dados do aluno">
+							<div class="ui-fluid">
+								<p:panelGrid columns="4" cellpadding="20" layout="grid"
+									styleClass="no-border ui-fluid"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+									<p:outputLabel value="Nome:" for="nome" />
+									<p:inputText id="nome" value="#{alunoController.aluno.nome}"
+										placeholder="Ex: josé da silva"
+										style="text-transform: uppercase"
+										onchange="this.value = value.toUpperCase()" required="true" />
+
+									<p:outputLabel value="Matrícula :" for="matricula" />
+									<p:inputText id="matricula"
+										value="#{alunoController.aluno.matricula}" required="true"
+										placeholder="sua matrícula UFC"
+										style="text-transform: uppercase" />
+									<p:outputLabel value="Curso: " for="curso" />
+									<p:inputText id="curso" value="#{alunoController.aluno.serie}"
+										placeholder="Ex: Engenharia Mecânica"
+										style="text-transform: uppercase"
+										onchange="this.value = value.toUpperCase()" required="true" />
+									<p:outputLabel value="Período de ingresso:" for="turma" />
+									<p:inputMask id="turma" value="#{alunoController.aluno.turma}"
+										placeholder="Ex: 2019-1" mask="9999-9"
+										style="text-transform: uppercase"
+										onchange="this.value = value.toUpperCase()" required="true" />
+
+									<p:outputLabel value="Telefone:" for="telefone" />
+									<p:inputMask id="telefone" placeholder="ex: 9 9999-9999"
+										value="#{alunoController.aluno.telefone}" mask="9 9999-9999"
+										style="text-transform: uppercase"
+										onchange="this.value = value.toUpperCase()" required="true" />
+
+									<p:outputLabel value="E-mail:" for="email" />
+									<p:inputText id="email" value="#{alunoController.aluno.email}"
+										style="text-transform: lowercase; color: blue"
+										placeholder="ex: seuemail@gmail.com"
+										onchange="this.value = value.toLowerCase()" required="true" />
+								</p:panelGrid>
+							</div>
+						</p:tab>
+					</p:tabView>
+				</div>
+			</div>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

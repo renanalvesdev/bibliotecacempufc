@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<style type="text/css">
+.old {
+	background-color: #fca752 !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+</style>
+
+
+	<ui:define name="title">
+        Cadastro de Emprestimos
+    </ui:define>
+
+	<ui:define name="body">
+		<f:metadata>
+		</f:metadata>
+
+		<adm:breadcrumb title="Cadastro de Emprestimos"
+			link="cadastro-emprestimo.xhtml?id=" />
+		<h:form id="form" prependId="false">
+			<p:growl id="growl" showDetail="true" />
+			<p:focus />
+
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div id="main-buttons" class="hidden-sm hidden-xs">
+						<p:commandButton value="Salvar" update="@form, form:growl"
+							icon="fa fa-check" action="#{emprestimoController.salvar()}"
+							styleClass="btn-primary" />
+						<p:spacer width="5" />
+						<!-- <p:commandButton value="Excluir" process="@this"
+							icon="fa fa-trash" styleClass="btn-danger">
+						</p:commandButton> -->
+						<p:spacer width="5" />
+						<p:commandButton value="Voltar" immediate="true"
+							action="#{emprestimoController.listar()}" process="@this"
+							icon="fa fa-close" />
+
+					</div>
+
+					<!-- <p:splitButton value="Salvar" update="@form" icon="fa fa-check"
+						styleClass="hidden-md hidden-lg btn-primary">
+						<p:menuitem value="Excluir" process="@this" icon="fa fa-trash" />
+						<p:separator />
+						<p:menuitem value="Voltar"
+							action="lista-emprestimo?faces-redirect=true" process="@this"
+							icon="fa fa-close" />
+					</p:splitButton>
+ -->
+					<p:separator />
+
+					<div class="ui-fluid">
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid" id="cadastro">
+							<p:outputLabel value="Matricula Aluno:" for="matricula" />
+							<p:inputText maxlength="8" id="matricula"
+								value="#{emprestimoController.aluno.matricula}">
+								<p:ajax event="blur"
+									listener="#{emprestimoController.consultaAluno()}"
+									update="panelinfo, form:growl, tab_view:emprestimoTable, @form" />
+							</p:inputText>
+
+
+							<p:outputLabel value="Código Livro:" for="codigo" />
+							<p:inputText id="codigo" maxlength="8"
+								value="#{emprestimoController.livro.codigo}"
+								disabled="#{emprestimoController.aluno.id == null}"
+								onchange="value=value.toUpperCase()">
+								<p:ajax event="blur"
+									listener="#{emprestimoController.consultaLivro()}"
+									update="panelinfo, form:growl, cadastro, form" />
+							</p:inputText>
+
+
+						</p:panelGrid>
+
+						<p:panelGrid columns="2" cellpadding="20" layout="grid"
+							id="panelinfo" styleClass="no-border ui-fluid">
+
+							<p:panel id="basic1" header="Aluno">
+								<p:panelGrid columns="2" cellpadding="20" layout="grid"
+									rendered="#{emprestimoController.aluno.id != null}"
+									styleClass="no-border ui-fluid">
+
+									<p:outputLabel value="Nome: " />
+									<h:outputText value="#{emprestimoController.aluno.nome}" />
+
+									<p:outputLabel value="Curso: " />
+									<h:outputText value="#{emprestimoController.aluno.serie}" />
+
+									<p:outputLabel value="Turma: " />
+									<h:outputText value="#{emprestimoController.aluno.turma}" />
+
+
+								</p:panelGrid>
+							</p:panel>
+							<p:panel id="basic" header="Livro">
+								<p:panelGrid columns="2" cellpadding="20" layout="grid"
+									rendered="#{emprestimoController.livro.id != null}"
+									styleClass="no-border ui-fluid">
+									<p:outputLabel value="Título: " />
+									<h:outputText value="#{emprestimoController.livro.titulo}" />
+
+									<p:outputLabel value="Ano: " />
+									<h:outputText value="#{emprestimoController.livro.ano}" />
+
+									<p:outputLabel value="Editora: " />
+									<h:outputText value="#{emprestimoController.livro.editora}" />
+
+
+									<p:outputLabel value="Autor: " />
+									<h:outputText value="#{emprestimoController.livro.autor}" />
+
+									<p:outputLabel value="Status empréstimo: "
+										rendered="#{emprestimoController.existeEmprestimo()}" />
+									<h:outputText value="Emprestado"
+										rendered="#{emprestimoController.existeEmprestimo()}"
+										style="color:red" />
+									<p:outputLabel value="Status reserva: "
+										rendered="#{emprestimoController.existeReserva()}" />
+									<h:outputText value="Reservado"
+										rendered="#{emprestimoController.existeReserva()}"
+										style="color:red" />
+								</p:panelGrid>
+								<div align="center">
+									<p:panelGrid columns="2" cellpadding="20" layout="grid">
+										<p:commandButton value="Emprestar" icon="fa fa-plus"
+											styleClass="btn-block btn-primary btn-flat"
+											action="#{emprestimoController.adicionarEmprestimo()}"
+											rendered="#{emprestimoController.livro.id != null}"
+											disabled="#{emprestimoController.desabilitaEmprestimo()}"
+											update="tab_view:emprestimoTable, form:growl, @form"
+											process="@this" />
+										<p:commandButton value="Reservar" icon="fa fa-plus"
+											styleClass="btn-block btn-primary btn-flat"
+											action="#{emprestimoController.adicionarReserva()}"
+											rendered="#{emprestimoController.livro.id != null}"
+											disabled="#{emprestimoController.desabilitaReserva()}"
+											update="tab_view:reservaTable, form:growl, @form" />
+									</p:panelGrid>
+								</div>
+							</p:panel>
+
+
+						</p:panelGrid>
+
+
+						<p:tabView id="tab_view" cache="false">
+
+							<!-- TAB EMPRESTIMOS -->
+							<p:tab id="tabEmprestimos"
+								title="Empréstimos(#{emprestimoController.sizeEmprestimos})">
+
+								<p:panel>
+									<p:dataTable rowStyleClass="background-color: 'green'"
+										id="emprestimoTable" widgetVar="emprestimoTable" rows="10"
+										paginator="true"
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {LastPageLink}"
+										value="#{emprestimoController.listaEmprestimo}" var="row"
+										rowKey="#{row.id}">
+
+
+										<p:column headerText="Titulo">
+											<h:outputText value="#{row.livro.titulo}" />
+										</p:column>
+
+										<p:column headerText="Dt. Emprest.">
+											<h:outputText value="#{row.dataEmprestimo}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Dt. Devol. Prevista">
+											<h:outputText value="#{row.dataDevolucaoPrevista}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="Dias de posse">
+											<h:outputText value="#{emprestimoController.contaDias(row)}" />
+										</p:column>
+
+										<p:column headerText="Renovações">
+											<h:outputText value="#{row.renovacoes}" />
+										</p:column>
+
+
+										<p:column headerText="Situação">
+											<h:outputText value="EM DIA"
+												rendered="#{emprestimoController.emprestimoEmDia(row)}"
+												style="color: green" />
+											<h:outputText value="ATRASADO"
+												rendered="#{!emprestimoController.emprestimoEmDia(row)}"
+												style="color: red" />
+										</p:column>
+
+										<p:column headerText="Operação">
+											<p:panelGrid columns="3" cellpadding="20" layout="grid"
+												styleClass="no-border ui-fluid">
+
+												<p:commandButton oncomplete="PF('dlgRenovacao').show();"
+													id="renovacao" disabled="#{row.id == null}"
+													update="tab_view:emprestimoTable, :form:growl, :dialog_renovacao "
+													styleClass="btn-success" icon="fa fa-rotate-left">
+													<f:setPropertyActionListener value="#{row}"
+														target="#{emprestimoController.emprestimo}" />
+													<p:tooltip for="renovacao" value="Renovar" position="top" />
+												</p:commandButton>
+
+
+												<p:commandButton oncomplete="PF('dlgPrimary').show();"
+													id="devolucao" disabled="#{row.id == null}"
+													update="tab_view:emprestimoTable" styleClass="btn-info"
+													icon="fa fa-mail-reply">
+													<f:setPropertyActionListener value="#{row}"
+														target="#{emprestimoController.emprestimo}" />
+													<p:tooltip for="devolucao" value="Devolver" position="top" />
+
+												</p:commandButton>
+
+												<p:commandButton id="remocao"
+													actionListener="#{emprestimoController.removeEmprestimo(row)}"
+													update="tab_view:emprestimoTable, dialog_devolucao"
+													disabled="#{row.id != null}"
+													styleClass="btn-danger btn-block" icon="fa fa-trash">
+													<f:setPropertyActionListener value="#{row}"
+														target="#{emprestimoController.emprestimo}" />
+													<p:tooltip for="remocao" value="Excluir" position="top" />
+												</p:commandButton>
+											</p:panelGrid>
+										</p:column>
+									</p:dataTable>
+								</p:panel>
+							</p:tab>
+
+
+
+
+							<!-- TAB RESERVAS -->
+							<p:tab title="Reservas (#{emprestimoController.sizeReservas})">
+
+								<p:panel>
+									<br />
+									<br />
+									<p:dataTable id="reservaTable" widgetVar="emprestimoTable"
+										rows="10" paginator="true"
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {LastPageLink}"
+										value="#{emprestimoController.listaReserva}" var="row"
+										rowKey="#{row.id}">
+
+
+										<p:column headerText="Titulo">
+											<div align="center">
+												<h:outputText value="#{row.emprestimo.livro.titulo}" />
+											</div>
+										</p:column>
+
+										<p:column headerText="Situação do Livro">
+											<div align="center">
+												<p:outputLabel
+													value="#{row.emprestimo.status ? 'Emprestado' : 'Disponível'}"
+													style="color: #{row.emprestimo.status ? 'red' : 'green'}" />
+											</div>
+										</p:column>
+
+										<p:column headerText="Operação">
+											<div align="center">
+												<p:panelGrid columns="2" cellpadding="20" layout="grid"
+													styleClass="no-border ui-fluid">
+													<p:commandButton id="mover_emprestimo"
+														disabled="#{row.emprestimo.status}"
+														update="tab_view:reservaTable, tab_view:emprestimoTable, :form:growl"
+														styleClass=" btn-info"
+														actionListener="#{emprestimoController.moverParaEmprestimo(row)}"
+														icon="fa fa-exchange">
+														<p:tooltip for="mover_emprestimo"
+															value="Mover para empréstimo" position="top" />
+													</p:commandButton>
+
+													<p:commandButton id="remocao" icon="fa fa-trash"
+														styleClass=" btn-danger btn-block"
+														update="tab_view:reservaTable, tab_view:emprestimoTable, :form:growl"
+														actionListener="#{emprestimoController.removeReserva(row)}">
+														<p:tooltip for="remocao" value="Excluir" position="top" />
+													</p:commandButton>
+
+												</p:panelGrid>
+											</div>
+										</p:column>
+
+									</p:dataTable>
+								</p:panel>
+
+							</p:tab>
+						</p:tabView>
+					</div>
+				</div>
+			</div>
+		</h:form>
+		<!-- DIALOGO RENOVACAO LIVROS -->
+		<p:dialog header="Renovação" styleClass="box-primary"
+			appendTo="@(body)" showEffect="fade" hideEffect="fade"
+			id="dialog_renovacao" widgetVar="dlgRenovacao" resizable="false"
+			minHeight="100" modal="true">
+			<h:form id="formulario_renovacao">
+
+				<p:panelGrid columns="2" cellpadding="10" layout="grid"
+					styleClass="no-border ui-fluid">
+					<p:outputLabel value="Livro: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.titulo}" />
+					<p:outputLabel value="Autor: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.autor}" />
+					<p:outputLabel value="Editora: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.editora}" />
+					<p:outputLabel value="Ano Publicação:: " />
+					<h:outputText value="#{emprestimoController.emprestimo.livro.ano}" />
+				</p:panelGrid>
+				<br />
+				<p:panelGrid columns="2" cellpadding="10" layout="grid"
+					styleClass="no-border ui-fluid">
+					<p:outputLabel value="Nova data prevista devolução: " />
+					<h:outputText value="#{emprestimoController.novaDataDevolucao()}"
+						style="color: green">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:panelGrid>
+				<br />
+				<p:separator />
+				<div align="center">
+					<p:commandButton value="Renovar"
+						update="tab_view:emprestimoTable, @form, :form:growl"
+						styleClass="btn-material btn-primary ui-confirmdialog-yes"
+						actionListener="#{emprestimoController.renovarEmprestimo()}"
+						icon="fa fa-check" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- DIALOGO DEVOLUÇÃO DE LIVROS -->
+		<p:dialog header="Devolução de livro" styleClass="box-primary"
+			appendTo="@(body)" showEffect="fade" hideEffect="fade"
+			id="dialog_devolucao" widgetVar="dlgPrimary" resizable="false"
+			minHeight="100" modal="true">
+			<h:form id="formulario_devolucao">
+
+				<p:panelGrid columns="2" cellpadding="10" layout="grid"
+					styleClass="no-border ui-fluid">
+					<p:outputLabel value="Livro: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.titulo}" />
+					<p:outputLabel value="Autor: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.autor}" />
+					<p:outputLabel value="Editora: " />
+					<h:outputText
+						value="#{emprestimoController.emprestimo.livro.editora}" />
+					<p:outputLabel value="Ano Publicação: " />
+					<h:outputText value="#{emprestimoController.emprestimo.livro.ano}" />
+				</p:panelGrid>
+
+				<br />
+				<p:separator />
+				<div align="center">
+					<p:outputLabel value="Confirma ?" />
+				</div>
+
+				<div align="center">
+					<p:commandButton value="Sim"
+						styleClass="btn-material btn-primary ui-confirmdialog-yes"
+						update="tab_view:emprestimoTable "
+						actionListener="#{emprestimoController.devolverLivro()}"
+						icon="fa fa-check" />
+					<p:commandButton value="Não" type="button"
+						onclick="PF('dlgPrimary').hide()"
+						styleClass="btn-material btn-danger ui-confirmdialog-no"
+						icon="fa fa-close" />
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

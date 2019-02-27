@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa por Livros
+    </ui:define>
+
+	<ui:define name="description">
+        Pesquise ... 
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa por Livros" />
+
+		<h:form id="form">
+			
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<br />
+					<p:commandButton action="#{livroController.novo()}" ajax="false"
+						icon="fa fa-plus" value="Novo" styleClass="btn-primary" />
+					<p:spacer width="5" />
+					<br />
+					<p:separator />
+
+					<div class="ui-fluid" id="div">
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel for="situacao" value="Situação:" />
+							<p:selectOneMenu id="situacao"
+								value="#{livroController.filtro.tipo}" unselectable="true">
+								<f:selectItem itemLabel="Ativos" itemValue="1" />
+								<f:selectItem itemLabel="Inativos" itemValue="2" />
+								<f:selectItem itemLabel="Todos" itemValue="3" />
+							</p:selectOneMenu>
+							<p:panelGrid />
+							<p:panelGrid />
+						</p:panelGrid>
+					</div>
+
+					<br /> <br />
+					<div align="center">
+						<p:commandButton icon="fa fa-search" value="Buscar"
+							action="#{livroController.buscarLivro()}" update="livroTable" />
+					</div>
+					<p:separator />
+					
+
+
+					<p:dataTable id="livroTable" widgetVar="livroTable"
+						emptyMessage="Nenhum registro encontrado." rows="5"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} 
+						{PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="( {currentPage} de {totalPages} )"
+						rowsPerPageTemplate="5,10,15"
+						value="#{livroController.listaLivro}" var="row" rowKey="#{row.id}">
+
+						<p:column headerText="Código" filterBy="#{row.codigo}"
+							filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.codigo}" style="color: blue" />
+							</div>
+						</p:column>
+						<p:column headerText="Titulo" filterBy="#{row.titulo}"
+							sortBy="#{row.titulo}" filterMatchMode="contains">
+							<div align="center">
+								<p:commandLink value="#{row.titulo}"
+									action="#{livroController.editar()}">
+									<f:setPropertyActionListener value="#{row}"
+										target="#{livroController.livro}" />
+								</p:commandLink>
+							</div>
+						</p:column>
+
+						<p:column headerText="Autor" filterBy="#{row.autor}"
+							sortBy="#{row.autor}" filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.autor}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Edição">
+							<div align="center">
+								<h:outputText value="#{row.edicao}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Ano">
+							<div align="center">
+								<h:outputText value="#{row.ano}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Editora" filterBy="#{row.editora}"
+							filterMatchMode="contains">
+							<div align="center">
+								<h:outputText value="#{row.editora}" />
+							</div>
+						</p:column>
+
+
+
+						<p:column headerText="Status">
+							<div align="center">
+								<p:outputLabel value="#{row.status ? 'Ativo' : 'Inativo'}"
+									style="color: #{row.status ? 'green' : 'red'}" />
+							</div>
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Livros Selecionados" widgetVar="livrosSelecionadas"
+			height="250" width="400" responsive="true" styleClass="box-success">
+			<p:dataList id="listaLivrosSelecionadas" value="" var="livro"
+				type="definition">
+
+			</p:dataList>
+		</p:dialog>
+
+		<p:dialog header="Reserva de livro" styleClass="box-primary"
+			appendTo="@(body)" showEffect="fade" hideEffect="fade"
+			id="dialog_reserva" widgetVar="dlgPrimary" resizable="false"
+			minHeight="100" modal="true">
+			<h:form id="formulario_reserva">
+
+				<p:panelGrid columns="2" cellpadding="10" layout="grid"
+					styleClass="no-border ui-fluid">
+					<p:outputLabel value="Livro: " />
+					<h:outputText value="#{livroController.livro.titulo}" />
+
+					<p:outputLabel value="Matrícula do aluno: " />
+					<p:inputText
+						value="#{emprestimoController.emprestimo.livro.titulo}" />
+				</p:panelGrid>
+
+				<br />
+				<p:separator />
+				<div align="center">
+					<p:outputLabel value="Confirma ?" />
+				</div>
+
+				<div align="center">
+					<p:commandButton value="Sim"
+						styleClass="btn-material btn-primary ui-confirmdialog-yes"
+						update=" form:livroTable "
+						actionListener="#{emprestimoController.devolverLivro()}"
+						icon="fa fa-check" />
+					<p:commandButton value="Não" type="button"
+						onclick="PF('dlgPrimary').hide()"
+						styleClass="btn-material btn-danger ui-confirmdialog-no"
+						icon="fa fa-close" />
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+
+	</ui:define>
+
+</ui:composition>

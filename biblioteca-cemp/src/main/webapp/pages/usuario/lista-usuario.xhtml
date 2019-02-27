@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa por Usuarios
+    </ui:define>
+
+	<ui:define name="description">
+        Pesquise ... 
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa por Usuarios" />
+
+		<h:form id="form">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<br />
+					<p:commandButton action="#{usuarioController.novo()}" ajax="false"
+						icon="fa fa-plus" value="Novo" styleClass="btn-primary" />
+					<p:spacer width="5" />
+					<br />
+					<p:separator />
+					<div class="ui-fluid" id="div">
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel for="situacao" value="Situação:" />
+							<p:selectOneMenu id="situacao"
+								value="#{usuarioController.filtro.situacaoFiltro}"
+								unselectable="true">
+								<f:selectItem itemLabel="Ativo" itemValue="1" />
+								<f:selectItem itemLabel="Inativo" itemValue="2" />
+								<f:selectItem itemLabel="Todos" itemValue="3" />
+							</p:selectOneMenu>
+							<p:panelGrid />
+							<p:panelGrid />
+						</p:panelGrid>
+					</div>
+
+					<br /> <br />
+					<div align="center">
+						<p:commandButton icon="fa fa-search" value="Buscar"
+							action="#{usuarioController.buscarUsuario()}"
+							update="usuarioTable" />
+					</div>
+					<p:separator />
+
+
+					<p:dataTable id="usuarioTable" widgetVar="usuarioTable" rows="10"
+						paginator="true"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {LastPageLink}"
+						value="#{usuarioController.listaUsuario}" var="row"
+						rowKey="#{row.id}"
+						selection="#{usuarioController.usuarioSelecionadas}">
+
+						<p:ajax event="rowSelect" />
+
+						<p:column selectionMode="multiple" width="5%"
+							styleClass="align-center" />
+
+						<p:column headerText="Nome" filterBy="#{row.nome}"
+							sortBy="#{row.funcionario.pessoa.nome}"
+							filterMatchMode="contains">
+							<h:commandLink value="#{row.nome}"
+								action="#{usuarioController.editar()}">
+								<f:setPropertyActionListener value="#{row}"
+									target="#{usuarioController.usuario}" />
+							</h:commandLink>
+						</p:column>
+
+						<p:column headerText="Tipo" filterBy="#{row.permissao.nome}"
+							sortBy="#{row.permissao.nome}" filterMatchMode="contains">
+							<h:outputText value="#{row.permissao.nome}" style="color: blue" />
+						</p:column>
+
+						<p:column headerText="Telefone" filterBy="#{row.telefone}"
+							sortBy="#{row.telefone}" filterMatchMode="contains">
+							<h:outputText value="#{row.telefone}" />
+						</p:column>
+
+
+						<p:column headerText="E-mail" filterBy="#{row.email}"
+							sortBy="#{row.email}" filterMatchMode="contains">
+							<h:outputText value="#{row.email}" />
+						</p:column>
+
+
+						<p:column headerText="Status" sortBy="#{row.status}"
+							filterMatchMode="contains">
+							<h:outputText value="#{row.status ? 'Ativo' : 'Inativo'}"
+								style="color: #{row.status ? 'green' : 'red'}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Funcionários Selecionados"
+			widgetVar="funcionarioSelecionadas" height="250" width="400"
+			responsive="true" styleClass="box-success">
+			<p:dataList id="listaFuncionarioSelecionadas" value=""
+				var="funcionario" type="definition">
+
+			</p:dataList>
+		</p:dialog>
+
+
+	</ui:define>
+
+</ui:composition>

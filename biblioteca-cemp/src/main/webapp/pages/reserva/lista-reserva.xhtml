@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:adm="http://github.com/adminfaces"
+	template="/WEB-INF/templates/template.xhtml">
+
+	<ui:define name="head-end">
+		<style type="text/css">
+.ui-grid-row .ui-grid-col-2, .ui-grid-row .ui-grid-col-10 {
+	padding: 0.5em 0;
+	margin-left: 10px;
+}
+
+.ui-orderlist .ui-orderlist-list {
+	height: auto;
+}
+
+.ui-orderlist .ui-grid-row .ui-grid-col-2, .ui-orderlist .ui-grid-row .ui-grid-col-10
+	{
+	padding: 0;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">
+        Pesquisa por Reservas
+    </ui:define>
+
+	<ui:define name="description">
+        Pesquise ... 
+    </ui:define>
+
+	<ui:define name="body">
+		<adm:breadcrumb title="Pesquisa por Reservas" />
+
+		<h:form id="form">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<p:spacer width="5" />
+					<br />
+					<p:separator />
+					<div class="ui-fluid" id="div">
+
+						<p:panelGrid columns="4" cellpadding="20" layout="grid"
+							styleClass="no-border ui-fluid"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+							<p:outputLabel for="situacao" value="Situação:" />
+							<p:selectOneMenu id="situacao"
+								value="#{reservaController.filtro.situacaoFiltro}"
+								unselectable="true">
+								<f:selectItem itemLabel="Em andamento" itemValue="1" />
+								<f:selectItem itemLabel="Encerrado" itemValue="2" />
+								<f:selectItem itemLabel="Todos" itemValue="3" />
+							</p:selectOneMenu>
+							<p:panelGrid />
+							<p:panelGrid />
+						</p:panelGrid>
+					</div>
+
+					<br /> <br />
+					<div align="center">
+						<p:commandButton icon="fa fa-search" value="Buscar"
+							action="#{reservaController.buscarReserva()}"
+							update=" reservaTable" />
+					</div>
+					<p:separator />
+
+
+
+					<p:dataTable id="reservaTable" widgetVar="reservaTable"
+						emptyMessage="Nenhum registro encontrado." rows="5"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} 
+						{PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="( {currentPage} de {totalPages} )"
+						rowsPerPageTemplate="5,10,15"
+						value="#{reservaController.listaReserva}" var="row"
+						rowKey="#{row.id}">
+
+						<p:column headerText="Livro"
+							filterBy="#{row.emprestimo.livro.titulo}"
+							sortBy="#{row.emprestimo.livro.titulo}"
+							filterMatchMode="contains">
+							<h:outputText value="#{row.emprestimo.livro.titulo}"
+								style="color: blue" />
+						</p:column>
+
+						<p:column headerText="Aluno" filterBy="#{row.aluno.nome}"
+							sortBy="#{row.aluno.nome}" filterMatchMode="contains">
+							<h:outputText value="#{row.aluno.nome}" />
+						</p:column>
+
+						<p:column headerText="Data da Reserva">
+							<div align="center">
+
+								<h:outputText value="#{row.dataReserva}">
+									<f:convertDateTime pattern="dd/MM/yyyy   HH:mm" />
+								</h:outputText>
+							</div>
+						</p:column>
+
+						<p:column headerText="Data de Encerramento">
+							<div align="center">
+
+								<h:outputText
+									value="#{row.status ? '-' : row.dataEncerramentoReserva}">
+									<f:convertDateTime pattern="dd/MM/yyyy   HH:mm" />
+								</h:outputText>
+
+							</div>
+						</p:column>
+
+						<p:column headerText="Expirada ?" sortBy="#{row.expirada}"
+							filterMatchMode="contains">
+							<h:outputText value="#{row.expirada ? 'SIM' : 'NÃO'}" />
+						</p:column>
+
+						<p:column headerText="Status" sortBy="#{row.status}"
+							filterMatchMode="contains">
+							<h:outputText
+								value="#{row.status ? 'Em andamento' : 'Encerrado'}"
+								style="color: #{row.status ? 'green' : 'red'}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Funcionários Selecionados"
+			widgetVar="funcionarioSelecionadas" height="250" width="400"
+			responsive="true" styleClass="box-success">
+			<p:dataList id="listaFuncionarioSelecionadas" value=""
+				var="funcionario" type="definition">
+
+			</p:dataList>
+		</p:dialog>
+
+
+	</ui:define>
+
+</ui:composition>
