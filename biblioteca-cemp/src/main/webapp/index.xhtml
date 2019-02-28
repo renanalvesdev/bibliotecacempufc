@@ -25,9 +25,16 @@
             </small> -->
 		</h2>
 		<p:spacer />
+
 		<p:separator />
 
 		<h:form>
+			<br />
+			<p:commandButton action="#{emprestimoController.novo()}" ajax="false"
+				icon="fa fa-plus" value="Nova Operação" styleClass="btn-primary" />
+			<p:spacer width="5" />
+			<br />
+			<p:separator />
 			<div class="row">
 
 				<div class="clearfix visible-sm-block"></div>

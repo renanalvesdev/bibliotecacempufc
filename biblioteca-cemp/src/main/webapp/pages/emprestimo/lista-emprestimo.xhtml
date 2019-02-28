@@ -40,9 +40,7 @@
 			<div class="box box-primary">
 				<div class="box-header with-border">
 					<br />
-					<p:commandButton action="#{emprestimoController.novo()}"
-						ajax="false" icon="fa fa-plus" value="Nova Operação"
-						styleClass="btn-primary" />
+					
 					<p:spacer width="5" />
 					<br />
 					<p:separator />
@@ -126,7 +124,7 @@
 						<p:column headerText="Título" filterBy="#{row.livro.titulo}"
 							sortBy="#{row.livro.titulo}" filterMatchMode="contains">
 							<div align="center">
-								<h:outputText value="#{row.livro.titulo}" />
+								<h:outputText value="#{row.livro.titulo}" style="color: blue" />
 							</div>
 						</p:column>
 						<p:column headerText="Aluno" filterBy="#{row.aluno.nome}"
@@ -134,8 +132,8 @@
 							<div align="center">
 								<h:commandLink value="#{row.aluno.nome}"
 									action="#{emprestimoController.editar()}">
-									<f:setPropertyActionListener value="#{row}"
-										target="#{emprestimoController.emprestimo}" />
+									<f:setPropertyActionListener value="#{row.aluno}"
+										target="#{emprestimoController.aluno}" />
 								</h:commandLink>
 							</div>
 						</p:column>
@@ -175,7 +173,7 @@
 									value="#{emprestimoController.contaDias(row)} dia(s)" />
 							</div>
 						</p:column>
-						
+
 						<p:column headerText="Situação">
 							<h:outputText value="EM DIA"
 								rendered="#{emprestimoController.emprestimoEmDia(row)}"
@@ -184,7 +182,7 @@
 								rendered="#{!emprestimoController.emprestimoEmDia(row)}"
 								style="color: red" />
 						</p:column>
-						
+
 						<p:column headerText="Status">
 							<div align="center">
 								<h:outputText

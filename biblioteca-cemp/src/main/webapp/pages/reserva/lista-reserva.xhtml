@@ -83,13 +83,34 @@
 							filterBy="#{row.emprestimo.livro.titulo}"
 							sortBy="#{row.emprestimo.livro.titulo}"
 							filterMatchMode="contains">
-							<h:outputText value="#{row.emprestimo.livro.titulo}"
-								style="color: blue" />
+							<div align="center">
+								<h:outputText value="#{row.emprestimo.livro.titulo}"
+									style="color: blue" />
+							</div>
 						</p:column>
 
 						<p:column headerText="Aluno" filterBy="#{row.aluno.nome}"
 							sortBy="#{row.aluno.nome}" filterMatchMode="contains">
-							<h:outputText value="#{row.aluno.nome}" />
+							<div align="center">
+								<h:outputText value="#{row.aluno.nome}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Situação do Livro">
+							<div align="center">
+								<p:outputLabel
+									value="#{row.emprestimo.status ? 'Emprestado' : 'Disponível'}"
+									style="color: #{row.emprestimo.status ? 'red' : 'green'}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Data Disp.Prevista">
+							<div align="center">
+
+								<h:outputText value="#{row.emprestimo.dataDevolucaoPrevista}">
+									<f:convertDateTime pattern="dd/MM/yyyy " />
+								</h:outputText>
+							</div>
 						</p:column>
 
 						<p:column headerText="Data da Reserva">

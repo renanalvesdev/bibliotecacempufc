@@ -169,7 +169,7 @@ public class EmprestimoController implements Serializable {
 	}
 
 	public String editar() {
-		aluno = emprestimo.getAluno();
+		//aluno = emprestimo.getAluno();
 		livro = new Livro();
 		listaEmprestimo = emprestimoDao.findByAluno(aluno);
 		listaReserva = reservaDao.findByAluno(aluno);
