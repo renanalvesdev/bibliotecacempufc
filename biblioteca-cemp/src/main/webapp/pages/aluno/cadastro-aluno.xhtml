@@ -18,7 +18,7 @@
 		<adm:breadcrumb title="Cadastro de Alunos"
 			link="cadastro-aluno.xhtml?id=" />
 		<h:form id="form" prependId="false">
-			<p:growl id="growl" showDetail="true" autoUpdate="true"/>
+			<p:growl id="growl" showDetail="true" autoUpdate="true" />
 			<p:focus />
 
 			<div class="box box-primary">
@@ -56,6 +56,16 @@
 						<!-- TAB DADOS DO ALUNO -->
 						<p:tab title="Dados do aluno">
 							<div class="ui-fluid">
+								<p:panelGrid columns="4" cellpadding="20" layout="grid"
+									styleClass="no-border ui-fluid"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+									<p:outputLabel value="Ativo ?" />
+									<p:selectBooleanButton id="value1" onIcon="fa fa-check"
+										offIcon="fa fa-close" value="#{alunoController.aluno.status}"
+										onLabel="Sim" offLabel="Não" style="width:60px" />
+								</p:panelGrid>
+								<br /> <br />
+								
 								<p:panelGrid columns="4" cellpadding="20" layout="grid"
 									styleClass="no-border ui-fluid"
 									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
