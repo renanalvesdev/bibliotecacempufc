@@ -10,7 +10,7 @@ public class JPAUtil {
 
 	static {
 		if (factory == null)
-			factory = Persistence.createEntityManagerFactory("cemp");
+			factory = Persistence.createEntityManagerFactory("d1b8vdk17p6sj5");
 	}
 
 	public static EntityManager getEntityManager() {
