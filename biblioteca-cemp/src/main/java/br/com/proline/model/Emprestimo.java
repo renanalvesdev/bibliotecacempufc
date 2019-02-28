@@ -8,12 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.domain.AbstractDomain;
 
 @Named
-@Entity
+@Entity(name = "Emprestimo")
+@Table(name = "emprestimo")
 public class Emprestimo extends AbstractDomain implements Serializable {
 
 	private static final long serialVersionUID = 1L;

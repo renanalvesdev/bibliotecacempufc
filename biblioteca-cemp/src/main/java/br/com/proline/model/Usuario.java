@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
@@ -18,7 +19,8 @@ import br.com.enums.PermissaoEnum;
 
 
 @Named
-@Entity
+@Entity(name = "Usuario")
+@Table(name = "usuario")
 public class Usuario extends AbstractDomain implements Serializable {
 
 	private static final long serialVersionUID = 1L;

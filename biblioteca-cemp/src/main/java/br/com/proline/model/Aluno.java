@@ -6,11 +6,13 @@ import java.util.Date;
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import br.com.domain.AbstractDomain;
 
 @Named
-@Entity
+@Entity(name = "Aluno")
+@Table(name="aluno")
 public class Aluno extends AbstractDomain implements Serializable {
 
 	private static final long serialVersionUID = 1L;

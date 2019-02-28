@@ -5,12 +5,14 @@ import java.io.Serializable;
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.domain.AbstractDomain;
 
 @Named
-@Entity
+@Entity(name = "Livro")
+@Table(name = "livro")
 public class Livro extends AbstractDomain implements Serializable {
 
 	private static final long serialVersionUID = 1L;

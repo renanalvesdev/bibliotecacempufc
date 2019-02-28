@@ -5,11 +5,13 @@ import java.io.Serializable;
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import br.com.domain.AbstractDomain;
 
 @Named
-@Entity
+@Entity(name = "Configuracoes")
+@Table(name = "configuracoes")
 public class Configuracoes extends AbstractDomain implements Serializable {
 
 	private static final long serialVersionUID = 1L;
