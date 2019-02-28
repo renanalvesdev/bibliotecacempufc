@@ -119,13 +119,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-
-		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.1-901-1.jdbc4</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
 		<dependency>
 			<groupId>joda-time</groupId>
