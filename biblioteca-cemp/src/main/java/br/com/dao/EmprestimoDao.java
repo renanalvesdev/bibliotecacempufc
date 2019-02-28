@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -18,7 +19,11 @@ public class EmprestimoDao extends DaoGeneric<Emprestimo> {
 	public List<Emprestimo> findByExample(Emprestimo filtro) {
 
 		List<Emprestimo> lista = new ArrayList<>();
-		Criteria c = criaCriteria();
+
+		Session session = criaSession();
+		session.beginTransaction();
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		// 3 -> todos , 1 -> corrente , 2 -> encerrado
@@ -47,13 +52,20 @@ public class EmprestimoDao extends DaoGeneric<Emprestimo> {
 
 		lista = c.list();
 
+		session.getTransaction().commit();
+		session.close();
+
 		return lista;
 	}
 
 	public List<Emprestimo> findByAluno(Aluno aluno) {
 
 		List<Emprestimo> lista = new ArrayList<>();
-		Criteria c = criaCriteria();
+
+		Session session = criaSession();
+		session.beginTransaction();
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		if (aluno != null) {
@@ -63,6 +75,9 @@ public class EmprestimoDao extends DaoGeneric<Emprestimo> {
 		}
 
 		lista = c.list();
+		
+		session.getTransaction().commit();
+		session.close();
 
 		return lista;
 	}
@@ -70,7 +85,11 @@ public class EmprestimoDao extends DaoGeneric<Emprestimo> {
 	public Emprestimo findByLivro(Livro livro) {
 
 		Emprestimo emprestimo = new Emprestimo();
-		Criteria c = criaCriteria();
+		Session session = criaSession();
+		session.beginTransaction();
+
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		if (livro != null) {
@@ -80,17 +99,27 @@ public class EmprestimoDao extends DaoGeneric<Emprestimo> {
 
 		emprestimo = (Emprestimo) c.setMaxResults(1).uniqueResult();
 
+		session.getTransaction().commit();
+		session.close();
+
 		return emprestimo;
 	}
 
 	public List<Emprestimo> findByEmDiaOuAtrasados() {
 
 		List<Emprestimo> lista = new ArrayList<>();
-		Criteria c = criaCriteria();
+
+		Session session = criaSession();
+		session.beginTransaction();
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		c.add(Restrictions.ne("situacao", 3));
 		lista = c.list();
+
+		session.getTransaction().commit();
+		session.close();
 
 		return lista;
 	}
@@ -98,13 +127,19 @@ public class EmprestimoDao extends DaoGeneric<Emprestimo> {
 	public List<Emprestimo> findByTodos() {
 
 		List<Emprestimo> lista = new ArrayList<>();
-		Criteria c = criaCriteria();
+
+		Session session = criaSession();
+		session.beginTransaction();
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
+
 		lista = c.list();
-		
+
+		session.getTransaction().commit();
+		session.close();
+
 		return lista;
 	}
-	
-	
+
 }

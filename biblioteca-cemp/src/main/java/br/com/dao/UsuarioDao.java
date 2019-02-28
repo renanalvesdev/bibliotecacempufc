@@ -5,30 +5,34 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
 import br.com.proline.model.Usuario;
 
-
 public class UsuarioDao extends DaoGeneric<Usuario> {
-	
-	
+
 	public List<Usuario> findByExample(Usuario filtro) {
-		
+
 		List<Usuario> lista = new ArrayList<Usuario>();
-		Criteria c = criaCriteria();
+		Session session = criaSession();
+		session.beginTransaction();
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-		if(filtro != null && filtro.getSituacaoFiltro() != 3) {
+		if (filtro != null && filtro.getSituacaoFiltro() != 3) {
 			c.add(Restrictions.eq("status", filtro.getSituacaoFiltro() == 1 ? true : false));
 		}
-	
+
 		lista = c.list();
 		
+		session.getTransaction().commit();
+		session.close();
+
 		return lista;
 	}
-	
+
 	public Usuario findByLogin(String cpf) {
 		cpf = cpf.replaceAll("[.-]", "");
 
@@ -41,18 +45,30 @@ public class UsuarioDao extends DaoGeneric<Usuario> {
 		return (Usuario) c.uniqueResult();
 	}
 
-	
-	public Usuario login(Usuario usuario) {
-		Criteria c = criaCriteria();
+	public Usuario login(Usuario usuarioFiltro) {
+		
+		Usuario usuario = new Usuario();
+		
+		Session session = criaSession();
+		session.beginTransaction();
+		Criteria c = session.createCriteria(getClasse());
+
 		c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-		c.add(Restrictions.eq("login", usuario.getLogin()));
-		c.add(Restrictions.eq("senha", usuario.getSenha()));
+		c.add(Restrictions.eq("login", usuarioFiltro.getLogin()));
+		c.add(Restrictions.eq("senha", usuarioFiltro.getSenha()));
 		c.add(Restrictions.eq("status", true));
 
-		return (Usuario) c.uniqueResult();
+		
+		usuario = (Usuario) c.uniqueResult(); 
+		
+		session.getTransaction().commit();
+		session.close();
+		
+		
+		return usuario;
 	}
-	
+
 	/*
 	 * public Usuario findByFuncionario (Funcionario funcionario) { Criteria c =
 	 * criaCriteria(); c.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
