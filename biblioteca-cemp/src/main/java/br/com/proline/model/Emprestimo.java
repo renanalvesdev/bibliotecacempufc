@@ -40,7 +40,7 @@ public class Emprestimo extends AbstractDomain implements Serializable {
 	@Column(name="data_devolucao")
 	private Date dataDevolucao;
 	
-	@Column(name = "renovacoes", columnDefinition = "integer default 0")
+	@Column(name = "renovacoes", columnDefinition = "int default 0")
 	private Integer renovacoes;
 	
 	@Transient

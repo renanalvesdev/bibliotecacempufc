@@ -96,7 +96,7 @@
 							<div align="center">
 
 								<h:outputText value="#{row.dataReserva}">
-									<f:convertDateTime pattern="dd/MM/yyyy   HH:mm" />
+									<f:convertDateTime pattern="dd/MM/yyyy " />
 								</h:outputText>
 							</div>
 						</p:column>
@@ -106,7 +106,7 @@
 
 								<h:outputText
 									value="#{row.status ? '-' : row.dataEncerramentoReserva}">
-									<f:convertDateTime pattern="dd/MM/yyyy   HH:mm" />
+									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 
 							</div>
