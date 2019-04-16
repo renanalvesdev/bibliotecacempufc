@@ -111,7 +111,7 @@ public class EmprestimoController implements Serializable {
 		incluirReservas();
 		finalizarReservas();
 
-		enviarEmail();
+		//enviarEmail();
 
 		carregarEmprestimo();
 		FacesUtil.addInfoMessage("Operação realizada com sucesso !");
